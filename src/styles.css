@@ -1,0 +1,225 @@
+@import "tailwindcss" source(none);
+@source "../src";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * Design system definition.
+ *
+ * The @theme inline block maps CSS custom properties to Tailwind utility
+ * classes (e.g. --color-primary -> bg-primary, text-primary).
+ *
+ * The :root and .dark blocks define the actual color values using oklch.
+ * All colors MUST use oklch format.
+ *
+ * To add a new semantic color:
+ * 1. Add the variable to :root (light value) and .dark (dark value)
+ * 2. Register it in @theme inline as --color-<name>: var(--<name>)
+ */
+
+@theme inline {
+  --font-sans: "Public Sans", system-ui, sans-serif;
+  --font-display: "Fraunces", Georgia, serif;
+  --font-serif: "Fraunces", Georgia, serif;
+  --font-mono: "Public Sans", ui-monospace, monospace;
+  --color-surface: var(--surface);
+  --color-ink: var(--ink);
+  --color-muted-ink: var(--muted-ink);
+  --color-line: var(--line);
+  --color-accent-press: var(--accent-press);
+  --color-politics: var(--politics);
+  --color-technology: var(--technology);
+  --color-entertainment: var(--entertainment);
+  --color-culture: var(--culture);
+  --color-business: var(--business);
+  --color-health: var(--health);
+  --color-automotive: var(--automotive);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-ring-offset-background: var(--background);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+}
+
+:root {
+  --radius: 0.625rem;
+  /* Gazettar Brand Colors: White, Orange (#FF5A00), Black */
+  --surface: oklch(1 0 0); /* White */
+  --ink: oklch(0.216 0.006 56); /* Black */
+  --muted-ink: oklch(0.5 0.011 73); /* Medium Gray */
+  --line: oklch(0.9 0.003 48); /* Light Gray */
+  --accent-press: oklch(0.675 0.215 35); /* Gazettar Orange #FF5A00 */
+  --politics: oklch(0.34 0.09 260);
+  --technology: oklch(0.47 0.09 155);
+  --entertainment: oklch(0.4 0.14 335);
+  --culture: oklch(0.45 0.11 60);
+  --business: oklch(0.42 0.1 240);
+  --health: oklch(0.45 0.11 175);
+  --automotive: oklch(0.4 0.08 20);
+  --background: oklch(1 0 0); /* White */
+
+  --foreground: oklch(0.216 0.006 56); /* Black */
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.216 0.006 56);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.216 0.006 56);
+  --primary: oklch(0.675 0.215 35); /* Orange */
+  --primary-foreground: oklch(1 0 0); /* White */
+  --secondary: oklch(0.95 0.003 48);
+  --secondary-foreground: oklch(0.216 0.006 56);
+  --muted: oklch(0.95 0.003 48);
+  --muted-foreground: oklch(0.5 0.011 73);
+  --accent: oklch(0.675 0.215 35); /* Orange */
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.9 0.003 48);
+  --input: oklch(0.9 0.003 48);
+  --ring: oklch(0.675 0.215 35); /* Orange */
+  --chart-1: oklch(0.675 0.215 35);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+  --sidebar: oklch(1 0 0);
+  --sidebar-foreground: oklch(0.216 0.006 56);
+  --sidebar-primary: oklch(0.675 0.215 35);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.95 0.003 48);
+  --sidebar-accent-foreground: oklch(0.216 0.006 56);
+  --sidebar-border: oklch(0.9 0.003 48);
+  --sidebar-ring: oklch(0.675 0.215 35);
+}
+
+.dark {
+  /* Dark mode: Black background with White and Orange accents */
+  --surface: oklch(0.216 0.006 56); /* Black */
+  --ink: oklch(1 0 0); /* White */
+  --muted-ink: oklch(0.7 0.003 48); /* Light Gray */
+  --line: oklch(0.3 0.006 56); /* Dark Gray */
+  --accent-press: oklch(0.675 0.215 35); /* Gazettar Orange */
+  
+  --background: oklch(0.216 0.006 56); /* Black */
+  --foreground: oklch(1 0 0); /* White */
+  --card: oklch(0.25 0.006 56);
+  --card-foreground: oklch(1 0 0);
+  --popover: oklch(0.25 0.006 56);
+  --popover-foreground: oklch(1 0 0);
+  --primary: oklch(0.675 0.215 35); /* Orange */
+  --primary-foreground: oklch(1 0 0);
+  --secondary: oklch(0.3 0.006 56);
+  --secondary-foreground: oklch(1 0 0);
+  --muted: oklch(0.3 0.006 56);
+  --muted-foreground: oklch(0.7 0.003 48);
+  --accent: oklch(0.675 0.215 35); /* Orange */
+  --accent-foreground: oklch(1 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(1 0 0);
+  --border: oklch(0.3 0.006 56);
+  --input: oklch(0.3 0.006 56);
+  --ring: oklch(0.675 0.215 35);
+  --chart-1: oklch(0.675 0.215 35);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+  --sidebar: oklch(0.216 0.006 56);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.675 0.215 35);
+  --sidebar-primary-foreground: oklch(1 0 0);
+  --sidebar-accent: oklch(0.3 0.006 56);
+  --sidebar-accent-foreground: oklch(1 0 0);
+  --sidebar-border: oklch(0.3 0.006 56);
+  --sidebar-ring: oklch(0.675 0.215 35);
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+  }
+}
+
+@keyframes rise {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: none; }
+}
+@keyframes tick {
+  from { opacity: 0.25; }
+  to { opacity: 1; }
+}
+
+@utility reveal {
+  animation: rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@utility pulse-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 9999px;
+  background: var(--accent-press);
+  animation: tick 1.6s ease-in-out infinite alternate;
+}
+
+@utility hl-u {
+  position: relative;
+  display: inline;
+
+  &::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: var(--accent-press);
+    transition: width 0.3s;
+  }
+
+  &:hover::after {
+    width: 100%;
+  }
+}
