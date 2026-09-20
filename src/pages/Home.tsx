@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import { getRecentPosts, getFeaturedPost } from "@/lib/sanity/api";
 import type { Post } from "@/types/sanity";
 import { format } from "date-fns";
-import Layout from "@/components/Layout";
 import {
   dummyPoliticsPosts,
   dummyTechnologyPosts,
@@ -62,193 +61,280 @@ export default function Home() {
   const finalEntertainmentPosts = entertainmentPosts.length > 0 ? entertainmentPosts : dummyEntertainmentPosts.slice(0, 3);
 
   return (
-    <Layout>
-      {/* Hero Section - matching HTML */}
-      <section className="px-[clamp(20px,4vw,56px)] pt-14 pb-35 transition-colors duration-200" style={{ display: 'grid', gridTemplateColumns: '1.5fr 1fr', gap: '56px', alignItems: 'end' }}>
-        <div>
-          <div className="text-[13px] text-accent-press font-semibold mb-[10px] uppercase tracking-wider">Politics, Technology & Entertainment</div>
+    <div className="min-h-screen bg-[#F5EDE4] text-ink">
+      {/* Header with Navigation */}
+      <header className="bg-white shadow-sm sticky top-0 z-50">
+        <div className=" mx-auto px-4 py-4">
+          <div className="flex items-center justify-between">
+            {/* Left: Menu Icon */}
+            <button className="p-2 hover:bg-gray-100 rounded">
+              <div className="w-5 h-0.5 bg-ink mb-1"></div>
+              <div className="w-5 h-0.5 bg-ink mb-1"></div>
+              <div className="w-5 h-0.5 bg-ink"></div>
+            </button>
 
-          <h1 className="font-serif text-[clamp(40px,5.4vw,72px)] font-medium leading-[1.08] tracking-[-0.01em] mb-[18px] text-ink">
-            The stories shaping <span className="text-accent-press">power</span>, <span className="text-accent-press">technology</span> and <span className="text-accent-press">culture</span> — as they happen.
-          </h1>
+            {/* Center: Logo */}
+            <Link to="/" className="flex items-center gap-2">
+              <img src="/gazettar logo.png" alt="Gazettar" className="h-10 w-auto" />
+              <div className="flex flex-col">
+                <div className="flex items-baseline gap-1 leading-none">
+                  <span className="font-sans text-xl font-normal text-ink">The</span>
+                  <span className="font-sans text-xl font-bold text-accent-press">Gazettar</span>
+                </div>
+                <span className="text-[7px] text-muted-ink uppercase tracking-[0.2em]">THE WORLD. YOUR WORLD.</span>
+              </div>
+            </Link>
 
-          <p className="text-[17px] text-muted-ink leading-[1.55] max-w-[46ch]">
-            Gazettar covers the decisions made in parliament, the products reshaping how we live, and the culture everyone's actually talking about — reported straight, without the noise.
-          </p>
-        </div>
-
-        <div className="border-l-2 border-accent-press pl-7 text-[14px] text-muted-ink bg-ink text-surface p-6">
-          <div className="mb-[22px]">
-            <span className="font-serif text-[34px] text-accent-press block mb-1">
-              {recentPosts.length > 0 ? recentPosts.length * 12 : 412}
-            </span>
-            stories published this year
+            {/* Right: Search Icon */}
+            <button className="p-2 hover:bg-gray-100 rounded">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              </svg>
+            </button>
           </div>
-          <div>
-            <span className="font-serif text-[34px] text-accent-press block mb-1">26k</span>
-            readers in the daily brief
-          </div>
-        </div>
-      </section>
 
-      {/* Featured Story Section */}
-      <section className="pt-0 pb-16 border-b border-line transition-colors duration-200">
-        <div className="max-w-[1180px] mx-auto px-[clamp(20px,4vw,56px)]">
+          {/* Navigation */}
+          <nav className="flex items-center justify-center gap-8 mt-4 text-sm">
+            <Link to="/" className="hover:text-accent-press transition-colors font-medium">Home</Link>
+            <Link to="/category/politics" className="hover:text-accent-press transition-colors">Politics</Link>
+            <Link to="/category/technology" className="hover:text-accent-press transition-colors">Technology</Link>
+            <Link to="/category/entertainment" className="hover:text-accent-press transition-colors">Entertainment</Link>
+          </nav>
+        </div>
+      </header>
+
+      {/* Main Container */}
+      <div className="max-w-7xl mx-auto">
+        {/* Main Content */}
+        <main className="p-6">
+          {/* Hero Story */}
           {featuredPost && (
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '48px', alignItems: 'center' }}>
+            <div className="relative h-[500px] rounded-lg overflow-hidden mb-8 group cursor-pointer">
               <Link to={`/article/${featuredPost.slug.current}`}>
                 {featuredPost.mainImage ? (
                   <img
                     src={featuredPost.mainImage}
                     alt={featuredPost.mainImageAlt || featuredPost.title}
-                    className="w-full aspect-[4/3] object-cover"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
                 ) : (
-                  <div className="w-full aspect-[4/3] relative overflow-hidden bg-gradient-to-br from-ink to-ink/90">
-                    <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 w-full h-full">
-                      <circle cx="320" cy="40" r="140" fill="currentColor" className="text-ink/50" opacity="0.6" />
-                      <rect x="-20" y="180" width="440" height="160" fill="currentColor" className="text-accent-press" opacity="0.18" />
-                      <line x1="0" y1="0" x2="400" y2="300" stroke="currentColor" className="text-surface" strokeOpacity="0.08" strokeWidth="1" />
-                      <line x1="400" y1="0" x2="0" y2="300" stroke="currentColor" className="text-surface" strokeOpacity="0.08" strokeWidth="1" />
-                    </svg>
-                  </div>
+                  <div className="w-full h-full bg-gradient-to-br from-gray-700 to-gray-900"></div>
                 )}
-              </Link>
-
-              <div>
-                <div className="text-[13px] text-accent-press font-semibold mb-4 uppercase tracking-wider">Featured — Politics</div>
-
-                <h2 className="font-serif text-[clamp(28px,3.4vw,42px)] font-medium leading-[1.08] tracking-[-0.01em] mb-4 text-ink">
-                  <Link to={`/article/${featuredPost.slug.current}`} className="hover:text-accent-press transition-colors">
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+                <div className="absolute bottom-0 left-0 right-0 p-8 text-white">
+                  <div className="flex items-center gap-2 mb-3">
+                    <span className="bg-accent-press text-white px-3 py-1 text-xs font-bold uppercase tracking-wider rounded">
+                      Featured
+                    </span>
+                    <span className="text-sm opacity-90">{formatDate(featuredPost.publishedAt)}</span>
+                  </div>
+                  <h1 className="font-display text-3xl md:text-4xl font-bold mb-3 leading-tight">
                     {featuredPost.title}
-                  </Link>
-                </h2>
-
-                <p className="text-[17px] text-muted-ink leading-[1.55] mb-5">
-                  {featuredPost.excerpt}
-                </p>
-
-                <div className="flex items-center gap-[10px] text-[13px] text-muted-ink">
-                  <span className="w-[34px] h-[34px] rounded-full bg-ink flex items-center justify-center text-surface font-serif text-[14px]">
-                    {featuredPost.author?.name?.charAt(0) || "A"}
-                  </span>
-                  <span>{featuredPost.author?.name || "Unknown"}</span>
-                  <span className="w-[3px] h-[3px] rounded-full bg-muted-ink"></span>
-                  <span>{featuredPost.readTime || 9} min read</span>
-                  <span className="w-[3px] h-[3px] rounded-full bg-muted-ink"></span>
-                  <span>{formatDate(featuredPost.publishedAt)}</span>
+                  </h1>
+                  <p className="text-lg opacity-90 max-w-3xl">
+                    {featuredPost.excerpt}
+                  </p>
                 </div>
-              </div>
+              </Link>
             </div>
           )}
-        </div>
-      </section>
 
-      {/* Main Container for sections */}
-      <div className="max-w-[1180px] mx-auto px-[clamp(20px,4vw,56px)]">
-        {/* Politics Section */}
-        {finalPoliticsPosts.length > 0 && (
-          <section className="py-16 border-b border-line transition-colors duration-200">
-            <div className="flex items-baseline justify-between mb-7">
-              <h2 className="font-serif text-[clamp(22px,2.6vw,30px)] font-medium text-ink">
-                <span className="text-accent-press">Politics</span>
-              </h2>
-              <Link to="/category/politics" className="text-[13.5px] font-semibold text-ink border-b-2 border-transparent pb-[2px] hover:text-accent-press hover:border-accent-press transition-all">
-                See all Politics →
-              </Link>
+          {/* Politics Section */}
+          <section className="mb-10">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-1 h-6 bg-accent-press"></div>
+              <h2 className="text-2xl font-display font-bold">Politics</h2>
             </div>
 
-            <div className="space-y-6">
-              {finalPoliticsPosts.map((post, index) => (
-                <Link to={`/article/${post.slug.current}`} key={post._id} className="grid grid-cols-[100px_1fr_auto] gap-7 py-[26px] border-t border-line items-start hover:opacity-80 transition-opacity">
-                  <span className="font-serif italic text-[14px] text-muted-ink pt-1">{String(index + 1).padStart(2, "0")}</span>
-                  <div>
-                    <h3 className="font-serif text-[23px] font-medium leading-tight mb-2 text-ink">{post.title}</h3>
-                    <p className="text-[14.5px] text-muted-ink leading-relaxed max-w-[60ch]">{post.excerpt}</p>
-                  </div>
-                  <span className="text-[12.5px] text-accent-press font-semibold whitespace-nowrap pt-[6px] uppercase tracking-wider">Politics</span>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {finalPoliticsPosts.slice(0, 2).map((post) => (
+                <article key={post._id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+                  <Link to={`/article/${post.slug.current}`}>
+                    {post.mainImage ? (
+                      <img
+                        src={post.mainImage}
+                        alt={post.mainImageAlt || post.title}
+                        className="w-full h-48 object-cover group-hover:opacity-90 transition-opacity"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gray-300"></div>
+                    )}
+                    <div className="p-5">
+                      <span className="text-xs text-accent-press font-bold uppercase tracking-wider">
+                        Politics
+                      </span>
+                      <h3 className="font-display text-xl font-semibold mt-2 mb-2 group-hover:text-accent-press transition-colors leading-tight">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-muted-ink mb-3 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center gap-3 text-xs text-muted-ink">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold">
+                            {post.author?.name?.charAt(0) || "A"}
+                          </div>
+                          <span>{post.author?.name || "Staff"}</span>
+                        </div>
+                        <span>•</span>
+                        <span>{post.readTime || 5} min</span>
+                      </div>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* Technology Section */}
+          <section className="mb-10">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-1 h-6 bg-accent-press"></div>
+              <h2 className="text-2xl font-display font-bold">Technology</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {finalTechnologyPosts.slice(0, 2).map((post) => (
+                <article key={post._id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+                  <Link to={`/article/${post.slug.current}`}>
+                    {post.mainImage ? (
+                      <img
+                        src={post.mainImage}
+                        alt={post.mainImageAlt || post.title}
+                        className="w-full h-48 object-cover group-hover:opacity-90 transition-opacity"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gray-300"></div>
+                    )}
+                    <div className="p-5">
+                      <span className="text-xs text-accent-press font-bold uppercase tracking-wider">
+                        Technology
+                      </span>
+                      <h3 className="font-display text-xl font-semibold mt-2 mb-2 group-hover:text-accent-press transition-colors leading-tight">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-muted-ink mb-3 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center gap-3 text-xs text-muted-ink">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold">
+                            {post.author?.name?.charAt(0) || "A"}
+                          </div>
+                          <span>{post.author?.name || "Staff"}</span>
+                        </div>
+                        <span>•</span>
+                        <span>{post.readTime || 5} min</span>
+                      </div>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* Entertainment Section */}
+          <section className="mb-10">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-1 h-6 bg-accent-press"></div>
+              <h2 className="text-2xl font-display font-bold">Entertainment</h2>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {finalEntertainmentPosts.slice(0, 2).map((post) => (
+                <article key={post._id} className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group">
+                  <Link to={`/article/${post.slug.current}`}>
+                    {post.mainImage ? (
+                      <img
+                        src={post.mainImage}
+                        alt={post.mainImageAlt || post.title}
+                        className="w-full h-48 object-cover group-hover:opacity-90 transition-opacity"
+                      />
+                    ) : (
+                      <div className="w-full h-48 bg-gray-300"></div>
+                    )}
+                    <div className="p-5">
+                      <span className="text-xs text-accent-press font-bold uppercase tracking-wider">
+                        Entertainment
+                      </span>
+                      <h3 className="font-display text-xl font-semibold mt-2 mb-2 group-hover:text-accent-press transition-colors leading-tight">
+                        {post.title}
+                      </h3>
+                      <p className="text-sm text-muted-ink mb-3 line-clamp-2">
+                        {post.excerpt}
+                      </p>
+                      <div className="flex items-center gap-3 text-xs text-muted-ink">
+                        <div className="flex items-center gap-2">
+                          <div className="w-6 h-6 rounded-full bg-gray-300 flex items-center justify-center text-xs font-semibold">
+                            {post.author?.name?.charAt(0) || "A"}
+                          </div>
+                          <span>{post.author?.name || "Staff"}</span>
+                        </div>
+                        <span>•</span>
+                        <span>{post.readTime || 5} min</span>
+                      </div>
+                    </div>
+                  </Link>
+                </article>
+              ))}
+            </div>
+          </section>
+
+          {/* Story From Editor's Desk */}
+          <section className="mb-10">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-1 h-6 bg-accent-press"></div>
+              <h2 className="text-2xl font-display font-bold">Story From Editor's Desk</h2>
+            </div>
+
+            <div className="grid grid-cols-4 gap-4">
+              {[...finalPoliticsPosts, ...finalTechnologyPosts].slice(0, 4).map((post) => (
+                <Link
+                  key={post._id}
+                  to={`/article/${post.slug.current}`}
+                  className="group"
+                >
+                  {post.mainImage ? (
+                    <img
+                      src={post.mainImage}
+                      alt={post.mainImageAlt || post.title}
+                      className="w-full h-32 object-cover rounded mb-2 group-hover:opacity-90 transition-opacity"
+                    />
+                  ) : (
+                    <div className="w-full h-32 bg-gray-300 rounded mb-2"></div>
+                  )}
+                  <h4 className="text-sm font-semibold line-clamp-2 group-hover:text-accent-press transition-colors">
+                    {post.title}
+                  </h4>
                 </Link>
               ))}
             </div>
           </section>
-        )}
 
-        {/* Technology Section */}
-        {finalTechnologyPosts.length > 0 && (
-          <section className="py-16 border-b border-line transition-colors duration-200">
-            <div className="flex items-baseline justify-between mb-7">
-              <h2 className="font-serif text-[clamp(22px,2.6vw,30px)] font-medium text-ink">
-                <span className="text-accent-press">Technology</span>
-              </h2>
-              <Link to="/category/technology" className="text-[13.5px] font-semibold text-ink border-b-2 border-transparent pb-[2px] hover:text-accent-press hover:border-accent-press transition-all">
-                See all Technology →
-              </Link>
-            </div>
-
-            <div className="space-y-6">
-              {finalTechnologyPosts.map((post, index) => (
-                <Link to={`/article/${post.slug.current}`} key={post._id} className="grid grid-cols-[100px_1fr_auto] gap-7 py-[26px] border-t border-line items-start hover:opacity-80 transition-opacity">
-                  <span className="font-serif italic text-[14px] text-muted-ink pt-1">{String(index + 1).padStart(2, "0")}</span>
-                  <div>
-                    <h3 className="font-serif text-[23px] font-medium leading-tight mb-2 text-ink">{post.title}</h3>
-                    <p className="text-[14.5px] text-muted-ink leading-relaxed max-w-[60ch]">{post.excerpt}</p>
-                  </div>
-                  <span className="text-[12.5px] text-accent-press font-semibold whitespace-nowrap pt-[6px] uppercase tracking-wider">Technology</span>
-                </Link>
-              ))}
+          {/* Newsletter Subscription */}
+          <section className="bg-white rounded-lg p-6 border border-gray-300">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-xl font-display font-bold mb-2">Subscribe to Newsletter</h3>
+                <p className="text-sm text-muted-ink">Get the latest news delivered to your inbox</p>
+              </div>
+              <form className="flex gap-2">
+                <input
+                  type="email"
+                  placeholder="Enter email address"
+                  className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent-press"
+                />
+                <button
+                  type="submit"
+                  className="bg-accent-press text-white px-6 py-2 rounded font-semibold hover:bg-accent-press/90 transition-colors"
+                >
+                  →
+                </button>
+              </form>
             </div>
           </section>
-        )}
-
-        {/* Entertainment Section */}
-        {finalEntertainmentPosts.length > 0 && (
-          <section className="py-16 border-b border-line transition-colors duration-200">
-            <div className="flex items-baseline justify-between mb-7">
-              <h2 className="font-serif text-[clamp(22px,2.6vw,30px)] font-medium text-ink">
-                <span className="text-accent-press">Entertainment</span>
-              </h2>
-              <Link to="/category/entertainment" className="text-[13.5px] font-semibold text-ink border-b-2 border-transparent pb-[2px] hover:text-accent-press hover:border-accent-press transition-all">
-                See all Entertainment →
-              </Link>
-            </div>
-
-            <div className="space-y-6">
-              {finalEntertainmentPosts.map((post, index) => (
-                <Link to={`/article/${post.slug.current}`} key={post._id} className="grid grid-cols-[100px_1fr_auto] gap-7 py-[26px] border-t border-line items-start hover:opacity-80 transition-opacity">
-                  <span className="font-serif italic text-[14px] text-muted-ink pt-1">{String(index + 1).padStart(2, "0")}</span>
-                  <div>
-                    <h3 className="font-serif text-[23px] font-medium leading-tight mb-2 text-ink">{post.title}</h3>
-                    <p className="text-[14.5px] text-muted-ink leading-relaxed max-w-[60ch]">{post.excerpt}</p>
-                  </div>
-                  <span className="text-[12.5px] text-accent-press font-semibold whitespace-nowrap pt-[6px] uppercase tracking-wider">Entertainment</span>
-                </Link>
-              ))}
-            </div>
-          </section>
-        )}
-
-        {/* Newsletter CTA */}
-        <section className="py-16">
-          <div className="bg-ink text-surface px-[clamp(24px,5vw,64px)] py-12 grid grid-cols-[1.2fr_1fr] gap-8 items-center transition-colors duration-200 border-4 border-accent-press">
-            <div>
-              <h2 className="font-serif text-[clamp(24px,3vw,34px)] font-medium text-surface mb-[10px]">
-                One brief every morning. <span className="text-accent-press">No noise.</span>
-              </h2>
-              <p className="text-[14.5px] text-surface/80">Join 26,000 readers who start their day with Gazettar's politics, tech and entertainment brief.</p>
-            </div>
-            <form className="flex border-b-2 border-accent-press">
-              <input
-                type="email"
-                placeholder="you@email.com"
-                className="flex-1 bg-transparent border-none text-surface text-[15px] py-3 px-1 placeholder:text-surface/60 focus:outline-none"
-              />
-              <button type="submit" className="bg-accent-press border-none text-ink font-bold text-[14px] py-3 px-6 cursor-pointer hover:opacity-90 transition-opacity uppercase tracking-wider">
-                Subscribe
-              </button>
-            </form>
-          </div>
-        </section>
+        </main>
       </div>
-    </Layout>
+    </div>
   );
 }

@@ -4,7 +4,6 @@ import { PortableText } from "@portabletext/react";
 import { getPostBySlug, getRelatedPosts } from "@/lib/sanity/api";
 import type { Post } from "@/types/sanity";
 import { format } from "date-fns";
-import Layout from "@/components/Layout";
 import { dummyArticleContent } from "@/data/dummyArticles";
 
 function formatDate(dateString: string): string {
@@ -90,168 +89,225 @@ export default function ArticleDetail() {
 
   if (loading) {
     return (
-      <Layout>
-        <main className="px-[clamp(20px,4vw,56px)] py-16">
-          <div className="space-y-6 animate-pulse max-w-[680px] mx-auto">
-            <div className="h-6 w-32 bg-gray-200" />
-            <div className="h-14 w-full bg-gray-200" />
-            <div className="h-5 w-3/4 bg-gray-200" />
+      <div className="min-h-screen bg-[#F5EDE4] text-ink">
+        <Header />
+        <main className="px-6 py-16 max-w-4xl mx-auto">
+          <div className="space-y-6 animate-pulse">
+            <div className="h-6 w-32 bg-gray-200 rounded" />
+            <div className="h-14 w-full bg-gray-200 rounded" />
+            <div className="h-5 w-3/4 bg-gray-200 rounded" />
           </div>
         </main>
-      </Layout>
+      </div>
     );
   }
 
   if (error || !post) {
     return (
-      <Layout>
-        <main className="px-[clamp(20px,4vw,56px)] py-16 text-center">
-          <h1 className="font-serif text-[34px] font-medium text-ink mb-4">
+      <div className="min-h-screen bg-[#F5EDE4] text-ink">
+        <Header />
+        <main className="px-6 py-16 text-center max-w-4xl mx-auto">
+          <h1 className="font-display text-3xl font-bold text-ink mb-4">
             {error || "Article not found"}
           </h1>
-          <p className="text-[18px] text-muted-ink mb-6">
+          <p className="text-lg text-muted-ink mb-6">
             The article you're looking for doesn't exist or has been removed.
           </p>
-          <Link to="/" className="text-[14px] font-semibold hover:underline text-accent-press">
+          <Link to="/" className="text-sm font-semibold hover:underline text-accent-press">
             ← Back to Home
           </Link>
         </main>
-      </Layout>
+      </div>
     );
   }
 
   return (
-    <Layout>
-      {/* Post Header */}
-      <header className="px-[clamp(20px,4vw,56px)] py-14 pb-0">
-        <div className="text-[14px] text-accent-press font-semibold mb-4 uppercase tracking-wider">
-          {post.category?.title || "Politics"}
+    <div className="min-h-screen bg-[#F5EDE4] text-ink">
+      <Header />
+
+      {/* Article Container */}
+      <article className="max-w-4xl mx-auto px-6 py-10">
+        {/* Category Badge */}
+        <div className="mb-4">
+          <Link
+            to={`/category/${post.category?.slug?.current || 'politics'}`}
+            className="inline-block bg-accent-press text-white px-3 py-1 text-xs font-bold uppercase tracking-wider rounded hover:bg-accent-press/90 transition-colors"
+          >
+            {post.category?.title || "Politics"}
+          </Link>
         </div>
 
-        <h1 className="font-serif text-[clamp(34px,4.6vw,54px)] font-medium leading-[1.08] tracking-[-0.01em] max-w-[20ch] mb-[18px] text-ink">
+        {/* Article Title */}
+        <h1 className="font-display text-4xl md:text-5xl font-bold leading-tight mb-6 text-ink">
           {post.title}
         </h1>
 
-        <p className="text-[18px] text-muted-ink leading-[1.55] max-w-[56ch] mb-[26px]">
+        {/* Article Excerpt */}
+        <p className="text-xl text-muted-ink leading-relaxed mb-6">
           {post.excerpt}
         </p>
 
-        {/* Meta bar */}
-        <div className="flex items-center gap-6 py-[26px] border-t-2 border-b-2 border-accent-press text-[13.5px] text-muted-ink">
-          <span className="w-[34px] h-[34px] rounded-full bg-accent-press flex items-center justify-center text-surface font-serif text-[14px] mr-[10px] font-bold">
-            {post.author?.name?.charAt(0) || "A"}
-          </span>
-          <span className="font-semibold text-ink">{post.author?.name || "Unknown"}</span>
-          <span>·</span>
-          <span className="text-accent-press font-semibold">{post.category?.title || "Politics"} Desk</span>
-          <span className="ml-auto">{post.readTime || 9} min read · {formatDate(post.publishedAt)}</span>
+        {/* Author & Meta Info */}
+        <div className="flex items-center gap-4 pb-6 mb-8 border-b-2 border-gray-300">
+          <div className="flex items-center gap-3">
+            <div className="w-12 h-12 rounded-full bg-accent-press flex items-center justify-center text-white font-bold text-lg">
+              {post.author?.name?.charAt(0) || "A"}
+            </div>
+            <div>
+              <p className="font-semibold text-ink">{post.author?.name || "Unknown"}</p>
+              <div className="flex items-center gap-2 text-sm text-muted-ink">
+                <span>{formatDate(post.publishedAt)}</span>
+                <span>•</span>
+                <span>{post.readTime || 9} min read</span>
+              </div>
+            </div>
+          </div>
         </div>
-      </header>
 
-      {/* Featured Image */}
-      <div className="max-w-[1180px] mx-auto px-[clamp(20px,4vw,56px)] mt-10">
-        {post.mainImage ? (
-          <img
-            src={post.mainImage}
-            alt={post.mainImageAlt || post.title}
-            className="w-full aspect-[16/8] object-cover"
-          />
-        ) : (
-          <div className="w-full aspect-[16/8] relative overflow-hidden bg-gradient-to-br from-ink to-ink/90">
-            <svg viewBox="0 0 400 300" preserveAspectRatio="xMidYMid slice" className="absolute inset-0 w-full h-full">
-              <circle cx="320" cy="40" r="140" fill="currentColor" className="text-ink/50" opacity="0.6" />
-              <rect x="-20" y="180" width="440" height="160" fill="currentColor" className="text-accent-press" opacity="0.18" />
-              <line x1="0" y1="0" x2="400" y2="300" stroke="currentColor" className="text-surface" strokeOpacity="0.08" strokeWidth="1" />
-              <line x1="400" y1="0" x2="0" y2="300" stroke="currentColor" className="text-surface" strokeOpacity="0.08" strokeWidth="1" />
-            </svg>
+        {/* Featured Image */}
+        {post.mainImage && (
+          <div className="mb-10 rounded-lg overflow-hidden">
+            <img
+              src={post.mainImage}
+              alt={post.mainImageAlt || post.title}
+              className="w-full h-auto object-cover"
+            />
           </div>
         )}
-      </div>
 
-      {/* Article Body */}
-      <article className="max-w-[680px] mx-auto px-[clamp(20px,4vw,56px)] py-12 text-[18px] leading-[1.75]">
-        {post.body && (
-          <div>
+        {/* Article Body */}
+        <div className="prose prose-lg max-w-none mb-12">
+          {post.body ? (
             <PortableText
               value={post.body}
               components={{
                 block: {
                   h2: ({ children }) => (
-                    <h2 className="font-serif text-[28px] font-medium leading-tight mt-[1.6em] mb-[0.6em]">
+                    <h2 className="font-display text-3xl font-bold mt-10 mb-4 text-ink">
                       {children}
                     </h2>
                   ),
                   normal: ({ children }) => (
-                    <p className="mb-[1.4em] first-of-type:first-letter:font-serif first-of-type:first-letter:font-semibold first-of-type:first-letter:text-[68px] first-of-type:first-letter:leading-[0.78] first-of-type:first-letter:float-left first-of-type:first-letter:pr-[10px] first-of-type:first-letter:pt-1">
+                    <p className="text-lg leading-relaxed mb-6 text-ink">
                       {children}
                     </p>
                   ),
                   blockquote: ({ children }) => (
-                    <blockquote className="border-l-2 border-accent-press my-8 pl-6 font-serif italic text-[22px] text-ink">
+                    <blockquote className="border-l-4 border-accent-press pl-6 my-8 italic text-xl text-ink">
                       {children}
                     </blockquote>
                   ),
                 },
                 marks: {
                   strong: ({ children }) => (
-                    <strong className="font-semibold">{children}</strong>
+                    <strong className="font-bold text-ink">{children}</strong>
                   ),
                 },
               }}
             />
+          ) : (
+            <p className="text-lg leading-relaxed text-ink">
+              {post.excerpt || "Content coming soon..."}
+            </p>
+          )}
+        </div>
+
+        {/* Author Bio */}
+        {post.author?.bio && (
+          <div className="bg-white rounded-lg p-6 mb-10 border border-gray-200">
+            <div className="flex items-start gap-4">
+              <div className="w-16 h-16 rounded-full bg-accent-press flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
+                {post.author.name?.charAt(0) || "A"}
+              </div>
+              <div>
+                <p className="font-bold text-lg mb-2">About {post.author.name}</p>
+                <p className="text-sm text-muted-ink leading-relaxed">
+                  {post.author.bio}
+                </p>
+              </div>
+            </div>
           </div>
         )}
-      </article>
 
-      {/* Author Bio */}
-      {post.author?.bio && (
-        <div className="max-w-[680px] mx-auto px-[clamp(20px,4vw,56px)] mb-16">
-          <div className="flex items-center gap-4 p-6 border-t border-line">
-            <span className="w-12 h-12 rounded-full bg-ink flex items-center justify-center text-surface font-serif text-[16px] shrink-0">
-              {post.author.name?.charAt(0) || "A"}
-            </span>
-            <p className="text-[14px] text-muted-ink leading-relaxed">
-              Written by {post.author.name} — {post.author.bio}
-            </p>
-          </div>
-        </div>
-      )}
-
-      {/* Read Next Section - Simple list layout */}
-      {relatedPosts.length > 0 && (
-        <section className="border-t border-line py-16 mb-16">
-          <div className="max-w-[680px] mx-auto px-[clamp(20px,4vw,56px)]">
-            <h3 className="font-serif text-[22px] font-medium mb-7 text-ink border-b-2 border-accent-press pb-3">
-              Read <span className="text-accent-press">next</span>
-            </h3>
-
-            <div className="space-y-0">
-              {relatedPosts.map((related, index) => (
+        {/* Related Posts */}
+        {relatedPosts.length > 0 && (
+          <div className="mt-12 pt-8 border-t-2 border-gray-300">
+            <h3 className="text-2xl font-display font-bold mb-6">Related Stories</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {relatedPosts.map((related) => (
                 <Link
                   key={related._id}
                   to={`/article/${related.slug.current}`}
-                  className="flex gap-7 py-6 border-t border-line items-start hover:opacity-80 transition-opacity group"
+                  className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow group"
                 >
-                  <span className="font-serif italic text-[14px] text-muted-ink pt-1 w-12">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                  <div className="flex-1">
-                    <h4 className="font-serif text-[23px] font-medium leading-tight mb-2 text-ink group-hover:text-accent-press">
+                  {related.mainImage && (
+                    <img
+                      src={related.mainImage}
+                      alt={related.mainImageAlt || related.title}
+                      className="w-full h-40 object-cover group-hover:opacity-90 transition-opacity"
+                    />
+                  )}
+                  <div className="p-5">
+                    <span className="text-xs text-accent-press font-bold uppercase tracking-wider">
+                      {post.category?.title || "Politics"}
+                    </span>
+                    <h4 className="font-display text-lg font-semibold mt-2 mb-2 group-hover:text-accent-press transition-colors leading-tight">
                       {related.title}
                     </h4>
-                    <p className="text-[14.5px] text-muted-ink leading-relaxed">
+                    <p className="text-sm text-muted-ink line-clamp-2">
                       {related.excerpt}
                     </p>
                   </div>
-                  <span className="text-[12.5px] text-accent-press font-semibold whitespace-nowrap pt-[6px] uppercase tracking-wider">
-                    {post.category?.title || "Politics"}
-                  </span>
                 </Link>
               ))}
             </div>
           </div>
-        </section>
-      )}
-    </Layout>
+        )}
+      </article>
+    </div>
+  );
+}
+
+function Header() {
+  return (
+    <header className="bg-white shadow-sm sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 py-4">
+        <div className="flex items-center justify-between">
+          {/* Left: Menu Icon */}
+          <button className="p-2 hover:bg-gray-100 rounded">
+            <div className="w-5 h-0.5 bg-ink mb-1"></div>
+            <div className="w-5 h-0.5 bg-ink mb-1"></div>
+            <div className="w-5 h-0.5 bg-ink"></div>
+          </button>
+
+          {/* Center: Logo */}
+          <Link to="/" className="flex items-center gap-2">
+            <img src="/gazettar logo.png" alt="Gazettar" className="h-10 w-auto" />
+            <div className="flex flex-col">
+              <div className="flex items-baseline gap-1 leading-none">
+                <span className="font-sans text-xl font-normal text-ink">The</span>
+                <span className="font-sans text-xl font-bold text-accent-press">Gazettar</span>
+              </div>
+              <span className="text-[7px] text-muted-ink uppercase tracking-[0.2em]">THE WORLD. YOUR WORLD.</span>
+            </div>
+          </Link>
+
+          {/* Right: Search Icon */}
+          <button className="p-2 hover:bg-gray-100 rounded">
+            <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Navigation */}
+        <nav className="flex items-center justify-center gap-8 mt-4 text-sm">
+          <Link to="/" className="hover:text-accent-press transition-colors font-medium">Home</Link>
+          <Link to="/category/politics" className="hover:text-accent-press transition-colors">Politics</Link>
+          <Link to="/category/technology" className="hover:text-accent-press transition-colors">Technology</Link>
+          <Link to="/category/entertainment" className="hover:text-accent-press transition-colors">Entertainment</Link>
+        </nav>
+      </div>
+    </header>
   );
 }
