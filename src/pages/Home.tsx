@@ -330,7 +330,7 @@ export default function Home() {
               <h2 className="text-2xl font-display font-bold">Story From Editor's Desk</h2>
             </div>
 
-            <div className="grid grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[...finalPoliticsPosts, ...finalTechnologyPosts].slice(0, 4).map((post) => (
                 <Link
                   key={post._id}
@@ -356,20 +356,20 @@ export default function Home() {
 
           {/* Newsletter Subscription */}
           <section className="bg-white rounded-lg p-6 border border-gray-300">
-            <div className="flex items-center justify-between">
-              <div>
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+              <div className="flex-1">
                 <h3 className="text-xl font-display font-bold mb-2">Subscribe to Newsletter</h3>
                 <p className="text-sm text-muted-ink">Get the latest news delivered to your inbox</p>
               </div>
-              <form className="flex gap-2">
+              <form className="flex flex-col sm:flex-row gap-2 w-full md:w-auto">
                 <input
                   type="email"
                   placeholder="Enter email address"
-                  className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent-press"
+                  className="px-4 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-accent-press w-full sm:w-64"
                 />
                 <button
                   type="submit"
-                  className="bg-accent-press text-white px-6 py-2 rounded font-semibold hover:bg-accent-press/90 transition-colors"
+                  className="bg-accent-press text-white px-6 py-2 rounded font-semibold hover:bg-accent-press/90 transition-colors whitespace-nowrap"
                 >
                   →
                 </button>
@@ -377,6 +377,59 @@ export default function Home() {
             </div>
           </section>
         </main>
+
+        {/* Footer */}
+        <footer className="bg-white border-t border-gray-300 mt-10">
+          <div className="max-w-7xl mx-auto px-6 py-8">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Logo and Description */}
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <img src="/gazettar logo.png" alt="Gazettar" className="h-12 w-auto" />
+                  <div className="flex flex-col">
+                    <div className="flex items-baseline gap-1 leading-none">
+                      <span className="font-sans text-lg font-normal text-ink">The</span>
+                      <span className="font-sans text-lg font-bold text-accent-press">Gazettar</span>
+                    </div>
+                    <span className="text-[7px] text-muted-ink uppercase tracking-[0.2em]">THE WORLD. YOUR WORLD.</span>
+                  </div>
+                </div>
+                <p className="text-sm text-muted-ink">
+                  Politics, technology and entertainment, reported daily.
+                </p>
+              </div>
+
+              {/* Sections */}
+              <div>
+                <h3 className="text-sm font-bold text-ink mb-3 uppercase tracking-wider">
+                  Sections
+                </h3>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <Link to="/category/politics" className="text-muted-ink hover:text-accent-press transition-colors">
+                      Politics
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/category/technology" className="text-muted-ink hover:text-accent-press transition-colors">
+                      Technology
+                    </Link>
+                  </li>
+                  <li>
+                    <Link to="/category/entertainment" className="text-muted-ink hover:text-accent-press transition-colors">
+                      Entertainment
+                    </Link>
+                  </li>
+                </ul>
+              </div>
+
+              {/* Copyright */}
+              <div className="text-sm text-muted-ink md:text-right">
+                <p>© {new Date().getFullYear()} Gazettar. All rights reserved.</p>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );
