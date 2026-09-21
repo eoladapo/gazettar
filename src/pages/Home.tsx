@@ -22,6 +22,7 @@ export default function Home() {
   const [featuredPost, setFeaturedPost] = useState<Post | null>(null);
   const [recentPosts, setRecentPosts] = useState<Post[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     async function loadData() {
@@ -64,16 +65,20 @@ export default function Home() {
     <div className="min-h-screen bg-[#F5EDE4] text-ink">
       {/* Header with Navigation */}
       <header className="bg-white shadow-sm sticky top-0 z-50">
-        <div className=" mx-auto px-4 py-4">
-          <div className="flex items-center justify-between">
-            {/* Left: Menu Icon */}
-            <button className="p-2 hover:bg-gray-100 rounded">
-              <div className="w-5 h-0.5 bg-ink mb-1"></div>
-              <div className="w-5 h-0.5 bg-ink mb-1"></div>
-              <div className="w-5 h-0.5 bg-ink"></div>
+        <div className="mx-auto px-4 py-4">
+          <div className="flex items-center justify-between md:justify-center">
+            {/* Mobile Menu Button - Only visible on mobile */}
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="md:hidden p-2 hover:bg-gray-100 rounded"
+              aria-label="Toggle menu"
+            >
+              <div className={`w-5 h-0.5 bg-ink mb-1 transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-1.5' : ''}`}></div>
+              <div className={`w-5 h-0.5 bg-ink mb-1 transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`}></div>
+              <div className={`w-5 h-0.5 bg-ink transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-1.5' : ''}`}></div>
             </button>
 
-            {/* Center: Logo */}
+            {/* Logo - Center */}
             <Link to="/" className="flex items-center gap-2">
               <img src="/gazettar logo.png" alt="Gazettar" className="h-10 w-auto" />
               <div className="flex flex-col">
@@ -85,21 +90,59 @@ export default function Home() {
               </div>
             </Link>
 
-            {/* Right: Search Icon */}
-            <button className="p-2 hover:bg-gray-100 rounded">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
-            </button>
+            {/* Spacer for mobile to keep logo centered */}
+            <div className="md:hidden w-10"></div>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex items-center justify-center gap-8 mt-4 text-sm">
-            <Link to="/" className="hover:text-accent-press transition-colors font-medium">Home</Link>
-            <Link to="/category/politics" className="hover:text-accent-press transition-colors">Politics</Link>
-            <Link to="/category/technology" className="hover:text-accent-press transition-colors">Technology</Link>
-            <Link to="/category/entertainment" className="hover:text-accent-press transition-colors">Entertainment</Link>
+          {/* Desktop Navigation - Below logo, centered, only visible on desktop */}
+          <nav className="hidden md:flex items-center justify-center gap-8 mt-4 text-sm">
+            <Link to="/" className="hover:text-accent-press transition-colors font-medium">
+              Home
+            </Link>
+            <Link to="/category/politics" className="hover:text-accent-press transition-colors">
+              Politics
+            </Link>
+            <Link to="/category/technology" className="hover:text-accent-press transition-colors">
+              Technology
+            </Link>
+            <Link to="/category/entertainment" className="hover:text-accent-press transition-colors">
+              Entertainment
+            </Link>
           </nav>
+
+          {/* Mobile Navigation Dropdown */}
+          <div className={`md:hidden transition-all duration-300 overflow-hidden ${mobileMenuOpen ? 'max-h-64 mt-4' : 'max-h-0'}`}>
+            <nav className="flex flex-col gap-3 text-sm border-t pt-4">
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-accent-press transition-colors font-medium py-2"
+              >
+                Home
+              </Link>
+              <Link
+                to="/category/politics"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-accent-press transition-colors py-2"
+              >
+                Politics
+              </Link>
+              <Link
+                to="/category/technology"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-accent-press transition-colors py-2"
+              >
+                Technology
+              </Link>
+              <Link
+                to="/category/entertainment"
+                onClick={() => setMobileMenuOpen(false)}
+                className="hover:text-accent-press transition-colors py-2"
+              >
+                Entertainment
+              </Link>
+            </nav>
+          </div>
         </div>
       </header>
 

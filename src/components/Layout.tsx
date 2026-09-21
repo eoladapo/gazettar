@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { ReactNode } from "react";
+import { ReactNode, useState } from "react";
 
 interface LayoutProps {
   children: ReactNode;
@@ -33,6 +33,7 @@ export default function Layout({ children }: LayoutProps) {
 }
 
 function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = window.location;
   const pathname = location.pathname;
 
@@ -42,21 +43,26 @@ function Header() {
     return false;
   };
 
+  const handleLinkClick = () => {
+    setMobileMenuOpen(false);
+  };
+
   return (
     <header className="border-b border-line sticky top-0 z-40 bg-surface/95 backdrop-blur-sm transition-colors duration-200">
-      <div className="px-[clamp(20px,4vw,56px)] py-[22px] flex items-baseline justify-between gap-6 flex-wrap">
-        <Link to="/" className="inline-flex items-center gap-2.5">
-          <img src="/gazettar logo.png" alt="Gazettar Icon" className="h-[42px] w-auto" />
-          <div className="flex flex-col">
-            <div className="flex items-baseline gap-1 leading-none">
-              <span className="font-sans text-[21px] font-normal text-ink">The</span>
-              <span className="font-sans text-[21px] font-bold text-accent-press">Gazettar</span>
-            </div>
-            <span className="text-[7.5px] text-muted-ink uppercase tracking-[0.2em] mt-0.5">THE WORLD. YOUR WORLD.</span>
-          </div>
-        </Link>
+      <div className="px-[clamp(20px,4vw,56px)] py-[22px] flex items-center justify-between gap-6">
+        {/* Mobile Menu Button - Left side on mobile only */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="md:hidden flex flex-col gap-1.5 w-8 h-8 items-center justify-center"
+          aria-label="Toggle menu"
+        >
+          <span className={`w-6 h-0.5 bg-ink transition-all ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`}></span>
+          <span className={`w-6 h-0.5 bg-ink transition-all ${mobileMenuOpen ? 'opacity-0' : ''}`}></span>
+          <span className={`w-6 h-0.5 bg-ink transition-all ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`}></span>
+        </button>
 
-        <nav className="flex gap-7 text-[14px] items-center">
+        {/* Desktop Navigation - Left side on desktop */}
+        <nav className="hidden md:flex gap-7 text-[14px] items-center">
           <Link
             to="/"
             className={`pb-[3px] border-b transition-all ${isActive('/')
@@ -87,6 +93,67 @@ function Header() {
           <Link
             to="/category/entertainment"
             className={`pb-[3px] border-b transition-all ${isActive('/category/entertainment')
+              ? 'border-accent-press text-ink'
+              : 'border-transparent text-ink hover:border-accent-press'
+              }`}
+          >
+            Entertainment
+          </Link>
+        </nav>
+
+        {/* Logo - Center on mobile, right on desktop */}
+        <Link to="/" className="inline-flex items-center gap-2.5 md:ml-auto">
+          <img src="/gazettar logo.png" alt="Gazettar Icon" className="h-[42px] w-auto" />
+          <div className="flex flex-col">
+            <div className="flex items-baseline gap-1 leading-none">
+              <span className="font-sans text-[21px] font-normal text-ink">The</span>
+              <span className="font-sans text-[21px] font-bold text-accent-press">Gazettar</span>
+            </div>
+            <span className="text-[7.5px] text-muted-ink uppercase tracking-[0.2em] mt-0.5">THE WORLD. YOUR WORLD.</span>
+          </div>
+        </Link>
+
+        {/* Spacer for mobile to keep logo centered */}
+        <div className="md:hidden w-8"></div>
+      </div>
+
+      {/* Mobile Navigation Menu */}
+      <div className={`md:hidden border-t border-line bg-surface transition-all duration-300 ${mobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0 overflow-hidden'}`}>
+        <nav className="flex flex-col px-[clamp(20px,4vw,56px)] py-4 gap-4 text-[14px]">
+          <Link
+            to="/"
+            onClick={handleLinkClick}
+            className={`pb-[3px] border-b w-fit transition-all ${isActive('/')
+              ? 'border-accent-press text-ink'
+              : 'border-transparent text-ink hover:border-accent-press'
+              }`}
+          >
+            Home
+          </Link>
+          <Link
+            to="/category/politics"
+            onClick={handleLinkClick}
+            className={`pb-[3px] border-b w-fit transition-all ${isActive('/category/politics')
+              ? 'border-accent-press text-ink'
+              : 'border-transparent text-ink hover:border-accent-press'
+              }`}
+          >
+            Politics
+          </Link>
+          <Link
+            to="/category/technology"
+            onClick={handleLinkClick}
+            className={`pb-[3px] border-b w-fit transition-all ${isActive('/category/technology')
+              ? 'border-accent-press text-ink'
+              : 'border-transparent text-ink hover:border-accent-press'
+              }`}
+          >
+            Technology
+          </Link>
+          <Link
+            to="/category/entertainment"
+            onClick={handleLinkClick}
+            className={`pb-[3px] border-b w-fit transition-all ${isActive('/category/entertainment')
               ? 'border-accent-press text-ink'
               : 'border-transparent text-ink hover:border-accent-press'
               }`}
